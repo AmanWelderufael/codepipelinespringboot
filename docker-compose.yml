@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: t_management_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  springboot:
+    image: 599642401641.dkr.ecr.us-east-1.amazonaws.com/cicdpipeline:latest
+    container_name: springboot
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: t_management_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres1
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres-data:
